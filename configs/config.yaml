@@ -1,0 +1,10 @@
+ai:
+  api_key: ""
+  api_url: "https://api.deepseek.com/chat/completions"
+  model: "deepseek-chat"
+  max_retries: 3
+  temperature: 0.2
+
+analysis:
+  skip_dirs: ["vendor", "node_modules", ".git"]
+  ignore_tests: true

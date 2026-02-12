@@ -1,0 +1,18 @@
+name: 'GoLint-AI Assistant'
+description: '基于 AI 的 Go 语言缺陷自动修复助手'
+inputs:
+  api_key:
+    description: 'DeepSeek API Key'
+    required: true
+  path:
+    description: '扫描路径，默认为当前目录 ./...'
+    default: './...'
+    required: false
+
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  env:
+    GOLINT_AI_API_KEY: ${{ inputs.api_key }}
+  args:
+    - ${{ inputs.path }}
