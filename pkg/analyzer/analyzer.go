@@ -7,6 +7,7 @@ import (
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/astutil"
 	"golint-ai/pkg/repairer"
+	"log"
 	"os"
 	"sync"
 )
@@ -28,6 +29,8 @@ var Analyzer = &analysis.Analyzer{
 }
 
 func run(pass *analysis.Pass) (interface{}, error) {
+	log.SetFlags(0) // 去掉 log 默认的时间前缀，让输出更整洁
+	log.Printf("🚀 [GoLint-AI] 开始分析路径: %v", pass.Pkg.Path())
 	// 创建一个缓冲区为 100 的管道（ACM 里的 Queue）
 	taskChan := make(chan fixTask, 100)
 	var wg sync.WaitGroup
@@ -47,6 +50,8 @@ func run(pass *analysis.Pass) (interface{}, error) {
 
 	// --- 第二步：生产者逻辑（扫描所有文件） ---
 	for _, f := range pass.Files {
+		// 这里增加一行：看看它扫描了哪些文件
+		log.Printf("📑 扫描文件: %s", pass.Fset.Position(f.Pos()).Filename)
 		// 这里的 f 就是当前正在扫描的文件根节点
 		ast.Inspect(f, func(n ast.Node) bool {
 			// 找赋值语句: a, err := ...
@@ -87,12 +92,15 @@ func run(pass *analysis.Pass) (interface{}, error) {
 	// --- 第三步：优雅关闭 ---
 	close(taskChan) // 告诉 Workers 没有新任务了
 	wg.Wait()       // 阻塞等待，直到 5 个 Worker 全部处理完
+	// 强制刷新输出流，保证 CI 能够捕获所有日志
+	os.Stdout.Sync()
+	os.Stderr.Sync()
 	return nil, nil
 }
 
 // processFix 是真正的“重体力活”：AI 修复 + 编译验证
 func processFix(t fixTask, workerID int) {
-	fmt.Printf("[Worker %d] 正在处理变量: %s...\n", workerID, t.id.Name)
+	log.Printf("[Worker %d] 正在处理变量: %s...\n", workerID, t.id.Name)
 
 	// 1. 第一次 AI 修复
 	fixCode, err := repairer.GetFix(t.id.Name, t.snippet, "")
@@ -103,7 +111,7 @@ func processFix(t fixTask, workerID int) {
 	// 2. 编译校验 (Verifier)
 	// (此处逻辑简化：在完整版中，你需要将 fixCode 拼入原文件并调用 ValidatePatch)
 
-	fmt.Printf("✨ [Worker %d] 成功为 %s 生成建议: %s\n", workerID, t.id.Name, fixCode)
+	log.Printf("✨ [Worker %d] 成功为 %s 生成建议: %s\n", workerID, t.id.Name, fixCode)
 
 	// 3. 汇报结果
 	t.pass.Report(analysis.Diagnostic{
