@@ -1,4 +1,4 @@
-package testdata
+package examples
 
 import "os"
 
