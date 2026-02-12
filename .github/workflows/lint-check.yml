@@ -1,0 +1,21 @@
+name: "AI Code Linting"
+
+on:
+  push:
+    branches: [ master, main ]
+  pull_request:
+    branches: [ master, main ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Run GoLint-AI
+        # 这里的 ./ 指向你当前仓库的根目录，GitHub 会读取仓库里的 Dockerfile
+        uses: ./
+        with:
+          api_key: ${{ secrets.DEEPSEEK_KEY }}
+          path: './...'
