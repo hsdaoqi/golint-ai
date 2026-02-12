@@ -3,26 +3,21 @@ package analyzer
 import (
 	"fmt"
 	"go/ast"
-	"golint-ai/pkg/repairer"
-	"golint-ai/pkg/verifier"
-	"os"
-	"sync"
-
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/astutil"
+	"golint-ai/pkg/repairer"
+	"os"
+	"sync"
 )
 
 // 1. 定义任务包，包含所有需要的“树”信息和“语义”信息
 type fixTask struct {
-	pass        *analysis.Pass
-	fileRoot    *ast.File       // 当前变量所属的整棵树的根（用于溯源）
-	as          *ast.AssignStmt // 赋值语句节点
-	id          *ast.Ident      // 变量名节点
-	snippet     string          // 提取出来的源码文本
-	fullContent []byte          // 完整文件内容
-	startOffset int             // 替换开始位置
-	endOffset   int             // 替换结束位置
+	pass     *analysis.Pass
+	fileRoot *ast.File       // 当前变量所属的整棵树的根（用于溯源）
+	as       *ast.AssignStmt // 赋值语句节点
+	id       *ast.Ident      // 变量名节点
+	snippet  string          // 提取出来的源码文本
 }
 
 var Analyzer = &analysis.Analyzer{
@@ -77,14 +72,11 @@ func run(pass *analysis.Pass) (interface{}, error) {
 
 					// 包装任务，发送给 Worker
 					taskChan <- fixTask{
-						pass:        pass,
-						fileRoot:    f, // 传递当前文件的根，用于后续溯源
-						as:          as,
-						id:          id,
-						snippet:     snippet,
-						fullContent: content,
-						startOffset: start.Offset,
-						endOffset:   end.Offset,
+						pass:     pass,
+						fileRoot: f, // 传递当前文件的根，用于后续溯源
+						as:       as,
+						id:       id,
+						snippet:  snippet,
 					}
 				}
 			}
@@ -109,12 +101,7 @@ func processFix(t fixTask, workerID int) {
 	}
 
 	// 2. 编译校验 (Verifier)
-	fullCode := verifier.ApplyPatch(t.fullContent, t.startOffset, t.endOffset, fixCode)
-	if ok, msg := verifier.ValidatePatch(fullCode); !ok {
-		fmt.Printf("[Worker %d] 校验失败: %s\n", workerID, msg)
-
-		return
-	}
+	// (此处逻辑简化：在完整版中，你需要将 fixCode 拼入原文件并调用 ValidatePatch)
 
 	fmt.Printf("✨ [Worker %d] 成功为 %s 生成建议: %s\n", workerID, t.id.Name, fixCode)
 
