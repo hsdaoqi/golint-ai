@@ -1,8 +1,8 @@
 package main
 
 import (
-	"golint-ai/pkg/analyzer"
-	"golint-ai/pkg/config"
+	"github.com/hsdaoqi/golint-ai/pkg/analyzer"
+	"github.com/hsdaoqi/golint-ai/pkg/config"
 	"os"
 
 	"github.com/spf13/cobra"

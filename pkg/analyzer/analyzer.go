@@ -2,11 +2,11 @@ package analyzer
 
 import (
 	"fmt"
+	"github.com/hsdaoqi/golint-ai/pkg/repairer"
 	"go/ast"
 	"golang.org/x/tools/go/analysis"
 	"golang.org/x/tools/go/analysis/passes/inspect"
 	"golang.org/x/tools/go/ast/astutil"
-	"golint-ai/pkg/repairer"
 	"log"
 	"os"
 	"sync"

@@ -1,4 +1,4 @@
-module golint-ai
+module github.com/hsdaoqi/golint-ai
 
 go 1.24.11
 

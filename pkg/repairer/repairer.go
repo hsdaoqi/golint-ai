@@ -4,11 +4,10 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/hsdaoqi/golint-ai/pkg/config"
 	"io"
 	"net/http"
 	"strings"
-
-	"golint-ai/pkg/config"
 )
 
 // LLM 交互协议结构体
