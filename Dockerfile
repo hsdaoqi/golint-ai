@@ -1,34 +1,28 @@
-# --- 第一阶段：构建 (Build) ---
-# 使用 golang 官方镜像作为构建环境
+# --- 第一阶段：构建 ---
 FROM golang:1.24-alpine AS builder
 
-# 设置工作目录
 WORKDIR /app
 
-# 拷贝依赖文件并下载
+# 拷贝依赖
 COPY go.mod go.sum ./
 RUN go mod download
 
-# 拷贝所有源代码
+# 拷贝源码
 COPY . .
 
-# 编译成名为 golint-ai 的二进制文件
-# CGO_ENABLED=0 表示静态编译，不依赖宿主机的动态库
-RUN CGO_ENABLED=0 GOOS=linux go build -o golint-ai ./cmd/golint-ai
+# 【关键修改】：将输出文件起名为 engine-bin，避免与目录名 golint-ai 冲突
+RUN CGO_ENABLED=0 GOOS=linux go build -o /app/engine-bin ./cmd/golint-ai
 
-# --- 第二阶段：运行 (Run) ---
-# 既然我们的工具需要执行 `go build` 校验，所以基础镜像必须带 Go 环境
+# --- 第二阶段：运行 ---
 FROM golang:1.24-alpine
 
-# 安装 git（很多 Go 项目依赖 git 下载包）
 RUN apk add --no-cache git
 
-# 从构建阶段拷贝编译好的二进制文件到当前镜像
-COPY --from=builder /app/golint-ai /usr/local/bin/golint-ai/
+# 【关键修改】：显式地将 builder 阶段的文件拷贝为最终的可执行文件
+COPY --from=builder /app/engine-bin /usr/local/bin/golint-ai
 
-# 设置执行权限
+# 赋予执行权限
 RUN chmod +x /usr/local/bin/golint-ai
 
-# 定义容器启动时执行的指令
-# 我们通过环境变量获取参数
+# 使用绝对路径运行
 ENTRYPOINT ["/usr/local/bin/golint-ai"]
