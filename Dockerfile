@@ -31,4 +31,4 @@ RUN chmod +x /usr/local/bin/golint-ai
 
 # 定义容器启动时执行的指令
 # 我们通过环境变量获取参数
-ENTRYPOINT ["golint-ai"]
+ENTRYPOINT ["/usr/local/bin/golint-ai"]
