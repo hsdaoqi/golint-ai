@@ -24,7 +24,7 @@ FROM golang:1.21-alpine
 RUN apk add --no-cache git
 
 # 从构建阶段拷贝编译好的二进制文件到当前镜像
-COPY --from:builder /app/golint-ai /usr/local/bin/golint-ai/
+COPY --from=builder /app/golint-ai /usr/local/bin/golint-ai/
 
 # 设置执行权限
 RUN chmod +x /usr/local/bin/golint-ai
