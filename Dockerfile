@@ -1,6 +1,6 @@
 # --- 第一阶段：构建 (Build) ---
 # 使用 golang 官方镜像作为构建环境
-FROM golang:1.21-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
 # 设置工作目录
 WORKDIR /app
@@ -18,7 +18,7 @@ RUN CGO_ENABLED=0 GOOS=linux go build -o golint-ai ./cmd/golint-ai
 
 # --- 第二阶段：运行 (Run) ---
 # 既然我们的工具需要执行 `go build` 校验，所以基础镜像必须带 Go 环境
-FROM golang:1.21-alpine
+FROM golang:1.24-alpine
 
 # 安装 git（很多 Go 项目依赖 git 下载包）
 RUN apk add --no-cache git
