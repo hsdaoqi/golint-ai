@@ -30,7 +30,7 @@ var Analyzer = &analysis.Analyzer{
 
 func run(pass *analysis.Pass) (interface{}, error) {
 	log.SetFlags(0) // 去掉 log 默认的时间前缀，让输出更整洁
-	log.Printf("🚀 [GoLint-AI] 开始分析路径: %v", pass.Pkg.Path())
+	log.Printf("[GoLint-AI] 开始分析路径: %v", pass.Pkg.Path())
 	// 创建一个缓冲区为 100 的管道（ACM 里的 Queue）
 	taskChan := make(chan fixTask, 100)
 	var wg sync.WaitGroup
@@ -51,7 +51,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 	// --- 第二步：生产者逻辑（扫描所有文件） ---
 	for _, f := range pass.Files {
 		// 这里增加一行：看看它扫描了哪些文件
-		log.Printf("📑 扫描文件: %s", pass.Fset.Position(f.Pos()).Filename)
+		log.Printf("扫描文件: %s", pass.Fset.Position(f.Pos()).Filename)
 		// 这里的 f 就是当前正在扫描的文件根节点
 		ast.Inspect(f, func(n ast.Node) bool {
 			// 找赋值语句: a, err := ...
@@ -111,7 +111,7 @@ func processFix(t fixTask, workerID int) {
 	// 2. 编译校验 (Verifier)
 	// (此处逻辑简化：在完整版中，你需要将 fixCode 拼入原文件并调用 ValidatePatch)
 
-	log.Printf("✨ [Worker %d] 成功为 %s 生成建议: %s\n", workerID, t.id.Name, fixCode)
+	log.Printf("[Worker %d] 成功为 %s 生成建议: %s\n", workerID, t.id.Name, fixCode)
 
 	// 3. 汇报结果
 	t.pass.Report(analysis.Diagnostic{
