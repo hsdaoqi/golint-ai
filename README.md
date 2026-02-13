@@ -44,7 +44,7 @@ go run cmd/golint-ai/main.go ./...
 - [x] 基础设施 (配置管理、并发 Worker 池)
 
 ### ② 缺陷模型 (Defect Models)
-- [ ] **Nil Pointer Dereference** (空指针解引用)
+- [x] **Nil Pointer Dereference** (空指针解引用)
 - [x] **Unhandled Error** (错误未处理 - 基础版)
 - [ ] **Resource Leak** (资源泄露)
 - [ ] **Goroutine Leak** (协程泄露)
@@ -52,7 +52,7 @@ go run cmd/golint-ai/main.go ./...
 
 ### ③ 静态分析核心 (Analysis Kernel)
 - [x] 基础 AST 遍历
-- [ ] CFG (控制流图) 构建
+- [x] CFG (控制流图) 构建
 - [ ] 数据流分析 (Data Flow Analysis)
 
 ### ④ 自动修复 (Auto Repair)

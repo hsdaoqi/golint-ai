@@ -28,11 +28,11 @@ type AIResponse struct {
 }
 
 // GetFix 向 AI 请求修复建议
-func GetFix(varName, codeSnippet, contextErr string) (string, error) {
+func GetFix(varName, codeSnippet, contextErr, checker string) (string, error) {
 	// 构造 Prompt
 	prompt := fmt.Sprintf(
-		"你是一个 Go 语言专家。变量 '%s' 是 error 类型但未被检查。\n"+
-			"代码片段：\n%s\n", varName, codeSnippet)
+		"你是一个 Go 语言专家。变量 '%s' 是 %s 类型但未被检查。\n"+
+			"代码片段：\n%s\n", varName, checker, codeSnippet)
 
 	// 如果有上次失败的编译错误，加入反馈
 	if contextErr != "" {
