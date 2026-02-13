@@ -15,4 +15,5 @@ runs:
   env:
     GOLINT_AI_API_KEY: ${{ inputs.api_key }}
   args:
-    - ${{ inputs.path }}
+    - 'scan'           # 【核心修正】：显式告诉程序执行 scan 子命令
+    - ${{ inputs.path }} # 这里的路径会变成 scan 命令的参数
