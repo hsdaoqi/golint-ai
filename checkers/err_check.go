@@ -31,7 +31,7 @@ func ScanUnhandledError(pass *analysis.Pass, f *ast.File) []Issue {
 					content, _ := os.ReadFile(start.Filename)
 
 					issues = append(issues, Issue{
-						Pos:      id.Pos(),
+						Pos:      as.Pos(),
 						End:      as.End(),
 						VarName:  id.Name,
 						Snippet:  string(content[start.Offset:end.Offset]),

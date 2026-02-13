@@ -46,7 +46,7 @@ go run cmd/golint-ai/main.go ./...
 ### ② 缺陷模型 (Defect Models)
 - [x] **Nil Pointer Dereference** (空指针解引用)
 - [x] **Unhandled Error** (错误未处理 - 基础版)
-- [ ] **Resource Leak** (资源泄露)
+- [x] **Resource Leak** (资源泄露)
 - [ ] **Goroutine Leak** (协程泄露)
 - [ ] **Double Lock** (双重锁)
 
@@ -58,7 +58,7 @@ go run cmd/golint-ai/main.go ./...
 ### ④ 自动修复 (Auto Repair)
 - [x] LLM 生成 Patch
 - [x] 编译器语法验证
-- [ ] 基于 AST 的 Patch 应用 (非文本替换)
+- [x] 基于 AST 的 Patch 应用 (非文本替换)
 
 ### ⑤ 评估与实验 (Evaluation)
 - [ ] 自建缺陷数据集

@@ -1,39 +1,35 @@
 package main
 
 import (
+	"database/sql"
 	"fmt"
+	"log"
 	"os"
 )
 
-func test1() {
-	open, err := os.Open("a.txt")
-	_ = open
-	_ = err
-}
-
-func someFunc() error {
-	f, err := os.Open("config")
-	_ = f
-	_ = err
-	return nil
-	//return err // 开发者已经把错误传给上层了，这是合法的！
-}
-func nilDemo() {
-	f, err := os.Open("none.txt")
-	fmt.Println(f.Name()) // 在检查 err 之前就用了 f，触发 NilPointer 检查！
-	_ = err
-}
-
-func ddd() {
-	f, err := os.Open("config.txt")
-	fmt.Println(f.Name())
-	if err != nil {
-		fmt.Println(err)
+func test() {
+	f1, err1 := os.Open("1.txt")
+	if err1 != nil {
+		return err1
 	}
+	defer f1.Close()
+	f2, err2 := os.Open("2.txt")
+	if err2 != nil {
+		// 根据实际上下文，此处应进行适当的错误处理（如返回错误、记录日志等）
+		// 示例：return err2
+	}
+	defer f2.Close()
+	_ = f1
+	_ = err1
+	_ = f2
+	_ = err2
 }
-
-func main() {
-	str := []string{"11", "22", "33"}
-	str = append([]string{str[0]}, str...)
-	fmt.Println(str)
+func secDemo(db *sql.DB, userInput string) {
+	token := os.Getenv("API_TOKEN")
+	if token == "" {
+		log.Fatal("API_TOKEN environment variable is not set")
+	} // 触发 Secret 检查
+	//query := fmt.Sprintf("SELECT * FROM users WHERE name='%s'", userInput)
+	//db.Query("SELECT * FROM users WHERE id = ?", userID) // 触发 SQLi 检查
+	fmt.Println(token)
 }

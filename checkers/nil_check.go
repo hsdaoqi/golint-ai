@@ -45,7 +45,7 @@ func ScanNilPointer(pass *analysis.Pass, f *ast.File) []Issue {
 				content, _ := os.ReadFile(start.Filename)
 
 				issues = append(issues, Issue{
-					Pos:      ptrId.Pos(),
+					Pos:      as.Pos(),
 					End:      as.End(),
 					VarName:  ptrId.Name,
 					Snippet:  string(content[start.Offset:end.Offset]),

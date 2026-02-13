@@ -31,7 +31,7 @@ func ScanResourceLeak(pass *analysis.Pass, f *ast.File) []Issue {
 					end := pass.Fset.Position(as.End())
 					content, _ := os.ReadFile(start.Filename)
 					issues = append(issues, Issue{
-						Pos:      id.Pos(),
+						Pos:      as.Pos(),
 						End:      as.End(),
 						VarName:  id.Name,
 						Snippet:  string(content[start.Offset:end.Offset]),
