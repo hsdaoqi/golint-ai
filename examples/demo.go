@@ -1,5 +1,7 @@
 package main
 
+import "os"
+
 //func test() {
 //	f1, err1 := os.Open("1.txt")
 //	if err1 != nil {
@@ -26,3 +28,11 @@ package main
 //	//db.Query("SELECT * FROM users WHERE id = ?", userID) // 触发 SQLi 检查
 //	fmt.Println(token)
 //}
+
+func test() {
+	f1, err := os.Open("1.txt")
+	if err != nil {
+
+	}
+	f1, err = os.Open("2.txt")
+}

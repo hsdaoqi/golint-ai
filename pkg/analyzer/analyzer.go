@@ -52,6 +52,7 @@ func run(pass *analysis.Pass) (interface{}, error) {
 		rawIssues = append(rawIssues, checkers.ScanResourceLeak(pass, f)...)
 		rawIssues = append(rawIssues, checkers.ScanHardcodedSecrets(pass, f)...)
 		rawIssues = append(rawIssues, checkers.ScanSQLInjection(pass, f)...)
+		rawIssues = append(rawIssues, checkers.ScanGoroutineLeak(pass, f)...)
 		if len(rawIssues) == 0 {
 			continue
 		}

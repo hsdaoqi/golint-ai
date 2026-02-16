@@ -35,6 +35,7 @@ func GetFix(varName, codeSnippet, contextErr, combinedCheckers string) (string, 
 		"ResourceLeak":    "【指令3：资源释放】使用 'defer' 显式调用 Close() 方法，防止内存或文件句柄泄露。",
 		"HardcodedSecret": "【指令4：脱敏处理】将硬编码秘钥改为从 os.Getenv() 读取，严禁源码泄露凭据。",
 		"SQLInjection":    "【指令5：参数化查询】严禁拼接 SQL 字符串，必须改用数据库驱动的占位符（? 或 $1）。",
+		"GoroutineLeak":   "【指令6：并发治理】检测到未托管的协程。请使用 sync.WaitGroup 重新包装这段代码：在 go 前面加 Add(1)，在协程内部加 defer Done()，并在函数末尾调用 Wait()。",
 	}
 
 	// 2. 自动识别并提取相关的修复指导（ACM 风格的关键词搜索）
